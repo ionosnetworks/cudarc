@@ -3076,6 +3076,17 @@ extern "C" {
 }
 #[cfg(feature = "dynamic-loading")]
 mod loaded {
+
+    unsafe fn make_panic_stub<F>() -> F {
+        // Create a function that panics when called
+        unsafe extern "C" fn panic_stub() -> ! {
+            panic!("Called unloaded function stub");
+        }
+
+        // Transmute the panic stub to the desired function type
+        std::mem::transmute_copy(&(panic_stub as *const ()))
+    }
+
     use super::*;
     pub unsafe fn cudnnActivationBackward(
         handle: cudnnHandle_t,
@@ -8270,7 +8281,7 @@ mod loaded {
                 .map(|sym| *sym)
                 .expect("Expected symbol in library");
             let cudnnAdvVersionCheck = __library
-                .get(b"cudnnAdvVersionCheck\0")
+                .get(b"cudnnAdvInferVersionCheck\0")
                 .map(|sym| *sym)
                 .expect("Expected symbol in library");
             let cudnnBackendCreateDescriptor = __library
@@ -8300,7 +8311,7 @@ mod loaded {
             let cudnnBackendPopulateCudaGraph = __library
                 .get(b"cudnnBackendPopulateCudaGraph\0")
                 .map(|sym| *sym)
-                .expect("Expected symbol in library");
+                .unwrap_or_else(|_| unsafe { make_panic_stub() });
             let cudnnBackendSetAttribute = __library
                 .get(b"cudnnBackendSetAttribute\0")
                 .map(|sym| *sym)
@@ -8308,7 +8319,7 @@ mod loaded {
             let cudnnBackendUpdateCudaGraph = __library
                 .get(b"cudnnBackendUpdateCudaGraph\0")
                 .map(|sym| *sym)
-                .expect("Expected symbol in library");
+                .unwrap_or_else(|_| unsafe { make_panic_stub() });
             let cudnnBatchNormalizationBackward = __library
                 .get(b"cudnnBatchNormalizationBackward\0")
                 .map(|sym| *sym)
@@ -8344,7 +8355,7 @@ mod loaded {
             let cudnnCnnVersionCheck = __library
                 .get(b"cudnnCnnVersionCheck\0")
                 .map(|sym| *sym)
-                .expect("Expected symbol in library");
+                .unwrap_or_else(|_| unsafe { make_panic_stub() });
             let cudnnConvolutionBackwardBias = __library
                 .get(b"cudnnConvolutionBackwardBias\0")
                 .map(|sym| *sym)
@@ -8624,7 +8635,7 @@ mod loaded {
             let cudnnGetCTCLossDescriptor_v9 = __library
                 .get(b"cudnnGetCTCLossDescriptor_v9\0")
                 .map(|sym| *sym)
-                .expect("Expected symbol in library");
+                .unwrap_or_else(|_| unsafe { make_panic_stub() });
             let cudnnGetCTCLossWorkspaceSize = __library
                 .get(b"cudnnGetCTCLossWorkspaceSize\0")
                 .map(|sym| *sym)
@@ -8744,11 +8755,11 @@ mod loaded {
             let cudnnGetLastErrorString = __library
                 .get(b"cudnnGetLastErrorString\0")
                 .map(|sym| *sym)
-                .expect("Expected symbol in library");
+                .unwrap_or_else(|_| unsafe { make_panic_stub() });
             let cudnnGetMaxDeviceVersion = __library
                 .get(b"cudnnGetMaxDeviceVersion\0")
                 .map(|sym| *sym)
-                .expect("Expected symbol in library");
+                .unwrap_or_else(|_| unsafe { make_panic_stub() });
             let cudnnGetMultiHeadAttnBuffers = __library
                 .get(b"cudnnGetMultiHeadAttnBuffers\0")
                 .map(|sym| *sym)
@@ -8856,7 +8867,7 @@ mod loaded {
             let cudnnGraphVersionCheck = __library
                 .get(b"cudnnGraphVersionCheck\0")
                 .map(|sym| *sym)
-                .expect("Expected symbol in library");
+                .unwrap_or_else(|_| unsafe { make_panic_stub() });
             let cudnnIm2Col = __library
                 .get(b"cudnnIm2Col\0")
                 .map(|sym| *sym)
@@ -8908,7 +8919,7 @@ mod loaded {
             let cudnnOpsVersionCheck = __library
                 .get(b"cudnnOpsVersionCheck\0")
                 .map(|sym| *sym)
-                .expect("Expected symbol in library");
+                .unwrap_or_else(|_| unsafe { make_panic_stub() });
             let cudnnPoolingBackward = __library
                 .get(b"cudnnPoolingBackward\0")
                 .map(|sym| *sym)
@@ -8940,7 +8951,7 @@ mod loaded {
             let cudnnRNNGetClip_v9 = __library
                 .get(b"cudnnRNNGetClip_v9\0")
                 .map(|sym| *sym)
-                .expect("Expected symbol in library");
+                .unwrap_or_else(|_| unsafe { make_panic_stub() });
             let cudnnRNNSetClip_v8 = __library
                 .get(b"cudnnRNNSetClip_v8\0")
                 .map(|sym| *sym)
@@ -8948,7 +8959,7 @@ mod loaded {
             let cudnnRNNSetClip_v9 = __library
                 .get(b"cudnnRNNSetClip_v9\0")
                 .map(|sym| *sym)
-                .expect("Expected symbol in library");
+                .unwrap_or_else(|_| unsafe { make_panic_stub() });
             let cudnnReduceTensor = __library
                 .get(b"cudnnReduceTensor\0")
                 .map(|sym| *sym)
@@ -8992,7 +9003,7 @@ mod loaded {
             let cudnnSetCTCLossDescriptor_v9 = __library
                 .get(b"cudnnSetCTCLossDescriptor_v9\0")
                 .map(|sym| *sym)
-                .expect("Expected symbol in library");
+                .unwrap_or_else(|_| unsafe { make_panic_stub() });
             let cudnnSetCallback = __library
                 .get(b"cudnnSetCallback\0")
                 .map(|sym| *sym)
