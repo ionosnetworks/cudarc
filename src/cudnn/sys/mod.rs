@@ -3129,8 +3129,35 @@ mod loaded {
     ) -> cudnnStatus_t {
         (culib().cudnnAddTensor)(handle, alpha, aDesc, A, beta, cDesc, C)
     }
+    #[cfg(not(any(
+        feature = "cuda-11040",
+        feature = "cuda-11050",
+        feature = "cuda-11060",
+        feature = "cuda-11070",
+        feature = "cuda-11080",
+    )))]
     pub unsafe fn cudnnAdvVersionCheck() -> cudnnStatus_t {
         (culib().cudnnAdvVersionCheck)()
+    }
+    #[cfg(any(
+        feature = "cuda-11040",
+        feature = "cuda-11050",
+        feature = "cuda-11060",
+        feature = "cuda-11070",
+        feature = "cuda-11080",
+    )))]
+    pub unsafe fn cudnnAdvInferVersionCheck() -> cudnnStatus_t {
+        (culib().cudnnAdvInferVersionCheck)()
+    }
+    #[cfg(any(
+        feature = "cuda-11040",
+        feature = "cuda-11050",
+        feature = "cuda-11060",
+        feature = "cuda-11070",
+        feature = "cuda-11080",
+    )))]
+    pub unsafe fn cudnnAdvTrainVersionCheck() -> cudnnStatus_t {
+        (culib().cudnnAdvTrainVersionCheck)()
     }
     pub unsafe fn cudnnBackendCreateDescriptor(
         descriptorType: cudnnBackendDescriptorType_t,
@@ -6464,7 +6491,30 @@ mod loaded {
             cDesc: cudnnTensorDescriptor_t,
             C: *mut ::core::ffi::c_void,
         ) -> cudnnStatus_t,
+        #[cfg(not(any(
+            feature = "cuda-11040",
+            feature = "cuda-11050",
+            feature = "cuda-11060",
+            feature = "cuda-11070",
+            feature = "cuda-11080",
+        )))]
         pub cudnnAdvVersionCheck: unsafe extern "C" fn() -> cudnnStatus_t,
+        #[cfg(any(
+            feature = "cuda-11040",
+            feature = "cuda-11050",
+            feature = "cuda-11060",
+            feature = "cuda-11070",
+            feature = "cuda-11080",
+        )))]
+        pub cudnnAdvInferVersionCheck: unsafe extern "C" fn() -> cudnnStatus_t,
+        #[cfg(any(
+            feature = "cuda-11040",
+            feature = "cuda-11050",
+            feature = "cuda-11060",
+            feature = "cuda-11070",
+            feature = "cuda-11080",
+        )))]
+        pub cudnnAdvTrainVersionCheck: unsafe extern "C" fn() -> cudnnStatus_t,
         pub cudnnBackendCreateDescriptor: unsafe extern "C" fn(
             descriptorType: cudnnBackendDescriptorType_t,
             descriptor: *mut cudnnBackendDescriptor_t,
@@ -8269,8 +8319,37 @@ mod loaded {
                 .get(b"cudnnAddTensor\0")
                 .map(|sym| *sym)
                 .expect("Expected symbol in library");
+            #[cfg(not(any(
+                feature = "cuda-11040",
+                feature = "cuda-11050",
+                feature = "cuda-11060",
+                feature = "cuda-11070",
+                feature = "cuda-11080",
+            )))]
             let cudnnAdvVersionCheck = __library
                 .get(b"cudnnAdvVersionCheck\0")
+                .map(|sym| *sym)
+                .expect("Expected symbol in library");
+            #[cfg(any(
+                feature = "cuda-11040",
+                feature = "cuda-11050",
+                feature = "cuda-11060",
+                feature = "cuda-11070",
+                feature = "cuda-11080",
+            )))]
+            let cudnnAdvInferVersionCheck = __library
+                .get(b"cudnnAdvInferVersionCheck\0")
+                .map(|sym| *sym)
+                .expect("Expected symbol in library");
+            #[cfg(any(
+                feature = "cuda-11040",
+                feature = "cuda-11050",
+                feature = "cuda-11060",
+                feature = "cuda-11070",
+                feature = "cuda-11080",
+            )))]
+            let cudnnAdvTrainVersionCheck = __library
+                .get(b"cudnnAdvTrainVersionCheck\0")
                 .map(|sym| *sym)
                 .expect("Expected symbol in library");
             let cudnnBackendCreateDescriptor = __library
@@ -9142,7 +9221,30 @@ mod loaded {
                 cudnnActivationBackward,
                 cudnnActivationForward,
                 cudnnAddTensor,
+                #[cfg(not(any(
+                    feature = "cuda-11040",
+                    feature = "cuda-11050",
+                    feature = "cuda-11060",
+                    feature = "cuda-11070",
+                    feature = "cuda-11080",
+                )))]
                 cudnnAdvVersionCheck,
+                #[cfg(any(
+                    feature = "cuda-11040",
+                    feature = "cuda-11050",
+                    feature = "cuda-11060",
+                    feature = "cuda-11070",
+                    feature = "cuda-11080",
+                )))]
+                cudnnAdvInferVersionCheck,
+                #[cfg(any(
+                    feature = "cuda-11040",
+                    feature = "cuda-11050",
+                    feature = "cuda-11060",
+                    feature = "cuda-11070",
+                    feature = "cuda-11080",
+                )))]
+                cudnnAdvTrainVersionCheck,
                 cudnnBackendCreateDescriptor,
                 cudnnBackendDestroyDescriptor,
                 cudnnBackendExecute,
