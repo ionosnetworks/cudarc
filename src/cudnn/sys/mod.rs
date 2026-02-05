@@ -8282,6 +8282,7 @@ mod loaded {
                 .expect("Expected symbol in library");
             let cudnnAdvVersionCheck = __library
                 .get(b"cudnnAdvInferVersionCheck\0")
+                .or(__library.get(b"cudnnAdvVersionCheck\0"))
                 .map(|sym| *sym)
                 .expect("Expected symbol in library");
             let cudnnBackendCreateDescriptor = __library
